@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Send, Mic, Sparkles } from "lucide-react";
+import { Send, Mic, MicOff, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 interface PromptInputProps {
   onSubmit: (prompt: string) => void;
@@ -10,7 +11,7 @@ interface PromptInputProps {
 
 export function PromptInput({ onSubmit, isGenerating }: PromptInputProps) {
   const [prompt, setPrompt] = useState("");
-  const [isListening, setIsListening] = useState(false);
+  const { isListening, startListening, stopListening } = useVoiceInput();
 
   const handleSubmit = () => {
     if (prompt.trim() && !isGenerating) {
@@ -27,8 +28,13 @@ export function PromptInput({ onSubmit, isGenerating }: PromptInputProps) {
   };
 
   const toggleVoiceInput = () => {
-    setIsListening(!isListening);
-    // Voice input logic would go here
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening((transcript) => {
+        setPrompt((prev) => prev + " " + transcript);
+      });
+    }
   };
 
   return (
@@ -49,11 +55,11 @@ export function PromptInput({ onSubmit, isGenerating }: PromptInputProps) {
             size="icon"
             onClick={toggleVoiceInput}
             className={`transition-fast ${
-              isListening ? "text-destructive" : "text-muted-foreground hover:text-primary"
+              isListening ? "text-destructive animate-pulse" : "text-muted-foreground hover:text-primary"
             }`}
             disabled={isGenerating}
           >
-            <Mic className="h-5 w-5" />
+            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
           </Button>
 
           <Button

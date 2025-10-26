@@ -1,5 +1,6 @@
-import { Menu, Settings, Sparkles } from "lucide-react";
+import { Menu, Settings, Sparkles, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "./ThemeProvider";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -7,6 +8,7 @@ interface HeaderProps {
 }
 
 export function Header({ onToggleSidebar, onOpenSettings }: HeaderProps) {
+  const { theme, setTheme } = useTheme();
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4">
@@ -33,14 +35,28 @@ export function Header({ onToggleSidebar, onOpenSettings }: HeaderProps) {
           </div>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onOpenSettings}
-          className="transition-fast hover:text-primary"
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="transition-fast hover:text-primary"
+          >
+            {theme === "light" ? (
+              <Moon className="h-5 w-5" />
+            ) : (
+              <Sun className="h-5 w-5" />
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onOpenSettings}
+            className="transition-fast hover:text-primary"
+          >
+            <Settings className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
     </header>
   );

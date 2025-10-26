@@ -1,29 +1,33 @@
-import { History, Trash2, Search } from "lucide-react";
+import { History, Trash2, Search, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 
-interface HistoryItem {
+export interface ConversationItem {
   id: string;
-  prompt: string;
+  title: string;
   timestamp: Date;
-  preview: string;
+  messageCount: number;
 }
 
 interface HistorySidebarProps {
-  history: HistoryItem[];
-  onSelectItem: (item: HistoryItem) => void;
+  conversations: ConversationItem[];
+  currentConversationId: string | null;
+  onSelectConversation: (id: string) => void;
   onClearHistory: () => void;
 }
 
-export function HistorySidebar({ history, onSelectItem, onClearHistory }: HistorySidebarProps) {
+export function HistorySidebar({ 
+  conversations, 
+  currentConversationId,
+  onSelectConversation, 
+  onClearHistory 
+}: HistorySidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredHistory = history.filter(
-    (item) =>
-      item.prompt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.preview.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredConversations = conversations.filter((conv) =>
+    conv.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -32,9 +36,9 @@ export function HistorySidebar({ history, onSelectItem, onClearHistory }: Histor
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <History className="h-5 w-5 text-primary" />
-            <h2 className="font-semibold">Historique</h2>
+            <h2 className="font-semibold">Conversations</h2>
           </div>
-          {history.length > 0 && (
+          {conversations.length > 0 && (
             <Button
               variant="ghost"
               size="sm"
@@ -58,32 +62,42 @@ export function HistorySidebar({ history, onSelectItem, onClearHistory }: Histor
       </div>
 
       <ScrollArea className="flex-1">
-        {filteredHistory.length === 0 ? (
+        {filteredConversations.length === 0 ? (
           <div className="p-6 text-center text-sm text-muted-foreground">
-            {searchQuery ? "Aucun résultat trouvé" : "Aucun historique pour le moment"}
+            {searchQuery ? "Aucun résultat trouvé" : "Aucune conversation pour le moment"}
           </div>
         ) : (
           <div className="p-2 space-y-2">
-            {filteredHistory.map((item) => (
+            {filteredConversations.map((conv) => (
               <button
-                key={item.id}
-                onClick={() => onSelectItem(item)}
-                className="w-full text-left p-3 rounded-lg hover:bg-accent transition-fast group"
+                key={conv.id}
+                onClick={() => onSelectConversation(conv.id)}
+                className={`w-full text-left p-3 rounded-lg transition-fast group ${
+                  currentConversationId === conv.id 
+                    ? "bg-primary/10 border border-primary/20" 
+                    : "hover:bg-accent"
+                }`}
               >
-                <p className="font-medium text-sm line-clamp-1 mb-1 group-hover:text-primary">
-                  {item.prompt}
-                </p>
-                <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                  {item.preview}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {new Date(item.timestamp).toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "short",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
+                <div className="flex items-start gap-2">
+                  <MessageSquare className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm line-clamp-2 mb-1 group-hover:text-primary">
+                      {conv.title}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span>{conv.messageCount} messages</span>
+                      <span>•</span>
+                      <span>
+                        {new Date(conv.timestamp).toLocaleDateString("fr-FR", {
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </button>
             ))}
           </div>
