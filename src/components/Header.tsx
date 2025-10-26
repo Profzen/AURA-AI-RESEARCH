@@ -1,13 +1,14 @@
-import { Menu, Settings, Sparkles, Sun, Moon } from "lucide-react";
+import { Menu, Settings, Cpu, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "@/lib/ThemeProvider";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
   onOpenSettings: () => void;
+  userName?: string;
 }
 
-export function Header({ onToggleSidebar, onOpenSettings }: HeaderProps) {
+export function Header({ onToggleSidebar, onOpenSettings, userName }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -24,12 +25,12 @@ export function Header({ onToggleSidebar, onOpenSettings }: HeaderProps) {
 
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <Sparkles className="h-5 w-5 text-primary-foreground" />
+              <Cpu className="h-5 w-5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-bold">IA Générative</h1>
+              <h1 className="text-lg font-bold">AURA Research AI</h1>
               <p className="text-xs text-muted-foreground hidden sm:block">
-                Assistant scientifique intelligent
+                {userName ? `${userName} · Assistant scientifique intelligent` : "Assistant scientifique intelligent"}
               </p>
             </div>
           </div>

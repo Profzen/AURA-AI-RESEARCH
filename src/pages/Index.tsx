@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Header } from "@/components/Header";
 import { PromptInput } from "@/components/PromptInput";
 import { ChatArea, Message } from "@/components/ChatArea";
 import { HistorySidebar, ConversationItem } from "@/components/HistorySidebar";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import SettingsPanel from "@/components/SettingsPanel";
 import { toast } from "sonner";
+import { ProfileSelector, type UserProfile } from "@/components/ProfileSelector";
 
 interface Conversation {
   id: string;
@@ -18,61 +20,106 @@ const Index = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<UserProfile>("researcher");
+
+  const handleProfileChange = (profile: UserProfile) => {
+    setSelectedProfile(profile);
+    try {
+      const currentSettings = localStorage.getItem("userSettings");
+      const settings = currentSettings ? JSON.parse(currentSettings) : {};
+      localStorage.setItem("userSettings", JSON.stringify({ ...settings, profile }));
+      toast.success("Profil mis à jour");
+    } catch (error) {
+      console.error("Error saving profile:", error);
+    }
+  };
 
   const currentConversation = conversations.find((c) => c.id === currentConversationId);
   const currentMessages = currentConversation?.messages || [];
 
+  // Deterministic rotation for mock responses: use a ref index that increments each call
+  const mockTemplateIndexRef = useRef(0);
+  const generateMockResponse = (prompt: string, profile: string) => {
+    const templates: Array<(p: string) => string> = [
+      (p: string) => `Voici une synthèse initiale pour : "${p}".\n\nPoints clés :\n• Contexte et enjeux\n• Méthodologie possible\n• Questions ouvertes à approfondir.\n\nSouhaitez-vous que je développe un plan détaillé ?`,
+      (p: string) => `Merci pour votre question : "${p}".\n\nRéponse rapide :\n- Hypothèse plausible\n- Approche expérimentale suggérée\n- Résumé des bénéfices attendus\n\nJe peux aussi fournir des références fictives si nécessaire.`,
+      (p: string) => `Réponse (style ${profile || "assistant"}):\nJ'ai analysé votre demande "${p}" et je propose :\n1) Objectifs clairs\n2) Méthodes adaptées\n3) Limites et alternatives\n\nDites-moi si vous voulez un exemple concret.`,
+      (p: string) => `Extrait généré pour "${p}":\n- Résumé en 3 lignes\n- Liste d'actions prioritaires\n- Suggestions de suivi\n\nSouhaitez un format différent (bullet points, abstract, ou paragraphe) ?`,
+      (p: string) => `Brève réponse : Pour "${p}", je recommanderais de commencer par un état de l'art succinct, puis d'expérimenter une approche pilote et d'évaluer les métriques clés. Voulez-vous un exemple de protocole ?`,
+    ];
+
+    const idx = mockTemplateIndexRef.current % templates.length;
+    mockTemplateIndexRef.current = mockTemplateIndexRef.current + 1;
+    return templates[idx](prompt);
+  };
+
   const handleSendMessage = async (prompt: string) => {
-    // Create new conversation if none exists
-    if (!currentConversationId) {
-      const newConversation: Conversation = {
+    if (isGenerating) return;
+    
+    try {
+      let conversationId = currentConversationId;
+      
+      // Create new conversation if none exists
+      if (!conversationId) {
+        const newConversation: Conversation = {
+          id: Date.now().toString(),
+          title: prompt.substring(0, 50) + (prompt.length > 50 ? "..." : ""),
+          messages: [],
+          timestamp: new Date(),
+        };
+        setConversations((prev) => [newConversation, ...prev]);
+        conversationId = newConversation.id;
+        setCurrentConversationId(conversationId);
+      }
+
+      // Add user message
+      const userMessage: Message = {
         id: Date.now().toString(),
-        title: prompt.substring(0, 50) + (prompt.length > 50 ? "..." : ""),
-        messages: [],
-        timestamp: new Date(),
-      };
-      setConversations((prev) => [newConversation, ...prev]);
-      setCurrentConversationId(newConversation.id);
-    }
-
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: prompt,
-      timestamp: new Date(),
-    };
-
-    setConversations((prev) =>
-      prev.map((conv) =>
-        conv.id === (currentConversationId || Date.now().toString())
-          ? { ...conv, messages: [...conv.messages, userMessage] }
-          : conv
-      )
-    );
-
-    setIsGenerating(true);
-
-    // Simulate AI response
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: `Merci pour votre question : "${prompt}"\n\nCeci est une réponse simulée de l'IA. Dans une implémentation réelle, ce texte serait généré par un modèle d'IA générative qui analyserait votre demande et fournirait une réponse pertinente et détaillée.\n\nL'assistant IA peut :\n• Analyser et synthétiser des informations complexes\n• Fournir des explications claires et structurées\n• Adapter son style de réponse à vos besoins\n• Maintenir le contexte de la conversation\n\nN'hésitez pas à poser des questions de suivi pour approfondir le sujet.`,
+        role: "user",
+        content: prompt,
         timestamp: new Date(),
       };
 
       setConversations((prev) =>
         prev.map((conv) =>
-          conv.id === currentConversationId
-            ? { ...conv, messages: [...conv.messages, assistantMessage], timestamp: new Date() }
+          conv.id === conversationId
+            ? { ...conv, messages: [...conv.messages, userMessage] }
             : conv
         )
       );
 
+      setIsGenerating(true);
+
+      try {
+        // Simulate AI response
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: generateMockResponse(prompt, selectedProfile as unknown as string),
+          timestamp: new Date(),
+        };
+
+        // Make sure we're not unmounted before updating state
+        setConversations((prev) =>
+          prev.map((conv) =>
+            conv.id === conversationId
+              ? { ...conv, messages: [...conv.messages, assistantMessage], timestamp: new Date() }
+              : conv
+          )
+        );
+
+        toast.success("Réponse générée");
+      } finally {
+        setIsGenerating(false);
+      }
+    } catch (error) {
+      console.error("Error in handleSendMessage:", error);
       setIsGenerating(false);
-      toast.success("Réponse générée");
-    }, 2000);
+      toast.error("Une erreur est survenue");
+    }
   };
 
   const handleNewConversation = () => {
@@ -93,7 +140,7 @@ const Index = () => {
   };
 
   const handleOpenSettings = () => {
-    toast.info("Paramètres - À implémenter");
+    setIsSettingsOpen(true);
   };
 
   const conversationItems: ConversationItem[] = conversations.map((conv) => ({
@@ -133,6 +180,13 @@ const Index = () => {
           </SheetContent>
         </Sheet>
 
+        {/* Settings Sheet */}
+        <Sheet open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+          <SheetContent side="right" className="p-0 w-full sm:w-[400px]">
+            <SettingsPanel onClose={() => setIsSettingsOpen(false)} />
+          </SheetContent>
+        </Sheet>
+
         {/* Main Content */}
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Chat Area */}
@@ -145,8 +199,12 @@ const Index = () => {
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-border bg-background p-4">
-            <div className="container max-w-4xl mx-auto">
+          <div className="border-t border-border bg-background p-1.5 sm:p-2">
+            <div className="container max-w-4xl mx-auto space-y-1.5">
+              <ProfileSelector
+                selectedProfile={selectedProfile}
+                onProfileChange={handleProfileChange}
+              />
               <PromptInput onSubmit={handleSendMessage} isGenerating={isGenerating} />
             </div>
           </div>

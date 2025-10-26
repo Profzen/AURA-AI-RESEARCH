@@ -46,11 +46,11 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
 
   if (messages.length === 0 && !isGenerating) {
     return (
-      <div className="flex items-center justify-center h-full min-h-[400px]">
-        <div className="text-center space-y-4 max-w-md">
-          <div className="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+      <div className="flex items-center justify-center h-full min-h-[300px] sm:min-h-[400px]">
+        <div className="text-center space-y-3 sm:space-y-4 max-w-md px-4">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
             <svg
-              className="w-8 h-8 text-primary"
+              className="w-6 h-6 sm:w-8 sm:h-8 text-primary"
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -62,8 +62,8 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
             </svg>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-2">Commencez une nouvelle conversation</h3>
-            <p className="text-muted-foreground text-sm">
+            <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Commencez une nouvelle conversation</h3>
+            <p className="text-muted-foreground text-xs sm:text-sm">
               Posez une question ou décrivez votre besoin pour démarrer une conversation avec l'IA.
             </p>
           </div>
@@ -74,9 +74,9 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
 
   return (
     <div className="flex flex-col h-full">
-      <div className="border-b border-border px-6 py-4 flex items-center justify-between bg-card">
-        <h3 className="font-semibold">Conversation</h3>
-        <div className="flex gap-2">
+      <div className="border-b border-border px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between bg-card">
+        <h3 className="font-semibold text-sm sm:text-base">Conversation</h3>
+        <div className="flex gap-1 sm:gap-2">
           <Button
             variant="ghost"
             size="sm"
@@ -113,13 +113,13 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
             disabled={messages.length === 0}
           >
             <Download className="h-4 w-4" />
-            Exporter
+            Export
           </Button>
         </div>
       </div>
 
-      <ScrollArea className="flex-1 px-6 py-4">
-        <div className="space-y-4 max-w-4xl mx-auto">
+      <ScrollArea className="flex-1 px-2 sm:px-6 py-2 sm:py-3">
+        <div className="space-y-2 sm:space-y-4 w-full max-w-4xl mx-auto">
           {messages.map((message) => (
             <ChatMessage
               key={message.id}
@@ -130,13 +130,13 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
           ))}
           
           {isGenerating && (
-            <div className="flex gap-4 p-4 bg-card rounded-lg">
-              <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
-                <div className="w-4 h-4 rounded-full border-2 border-accent-foreground border-t-transparent animate-spin" />
+            <div className="flex gap-2 sm:gap-4 p-2 sm:p-4 bg-card rounded-lg">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
+                <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 border-accent-foreground border-t-transparent animate-spin" />
               </div>
               <div className="flex-1">
-                <span className="font-semibold text-sm">Assistant IA</span>
-                <p className="text-sm text-muted-foreground mt-1 animate-pulse">Génération en cours...</p>
+                <span className="font-semibold text-xs sm:text-sm">Assistant IA</span>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 animate-pulse">Génération en cours...</p>
               </div>
             </div>
           )}

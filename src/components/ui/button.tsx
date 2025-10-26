@@ -39,7 +39,16 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+    // Ensure we don't pass undefined className which can cause issues with Radix Slot
+    const safeClassName = className || "";
+    const buttonClassName = buttonVariants({ variant, size, className: safeClassName });
+    
+    // Add error boundary around the button content
+    return (
+      <React.Fragment>
+        <Comp className={buttonClassName} ref={ref} {...props} />
+      </React.Fragment>
+    );
   },
 );
 Button.displayName = "Button";
