@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectTrigger,
@@ -23,6 +24,7 @@ interface SettingsPanelProps {
 }
 
 export default function SettingsPanel({ onClose }: SettingsPanelProps) {
+  const { t, i18n } = useTranslation();
   const [name, setName] = useState("");
   const [language, setLanguage] = useState("fr");
   const [profile, setProfile] = useState("researcher");
@@ -44,32 +46,37 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
   const handleSave = () => {
     const payload: UserSettings = { name, language, profile };
     localStorage.setItem("userSettings", JSON.stringify(payload));
-    toast.success("Paramètres sauvegardés");
-    if (onClose) onClose();
+    i18n.changeLanguage(language);
+    setTimeout(() => {
+      toast.success(t("settings.saved"));
+      if (onClose) onClose();
+    }, 0);
   };
 
   const handleLogout = () => {
     // For now, just clear stored settings and notify the user.
     localStorage.removeItem("userSettings");
-    toast("Déconnecté");
-    if (onClose) onClose();
+    setTimeout(() => {
+      toast(t("settings.disconnected"));
+      if (onClose) onClose();
+    }, 0);
   };
 
   return (
     <div className="p-6">
       <SheetHeader>
-        <SheetTitle>Paramètres</SheetTitle>
-        <SheetDescription>Personnalisez votre profil et préférences.</SheetDescription>
+        <SheetTitle>{t("settings.title")}</SheetTitle>
+        <SheetDescription>{t("settings.description")}</SheetDescription>
       </SheetHeader>
 
       <div className="mt-4 space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Nom</label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Votre nom" />
+          <label className="block text-sm font-medium mb-1">{t("settings.name")}</label>
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("settings.namePlaceholder")} />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Langue</label>
+          <label className="block text-sm font-medium mb-1">{t("settings.language")}</label>
           <Select value={language} onValueChange={(v) => setLanguage(v)}>
             <SelectTrigger>
               <SelectValue />
@@ -84,20 +91,16 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Type de profil</label>
+          <label className="block text-sm font-medium mb-1">{t("settings.profile")}</label>
           <Select value={profile} onValueChange={(v) => setProfile(v)}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="researcher">Chercheur</SelectItem>
-                <SelectItem value="student">Étudiant</SelectItem>
-                <SelectItem value="marketer">Marketeur</SelectItem>
-                <SelectItem value="designer">Designer</SelectItem>
-                <SelectItem value="dev">Développeur</SelectItem>
-                <SelectItem value="clinician">Clinicien</SelectItem>
-                <SelectItem value="other">Autre</SelectItem>
+                {Object.entries(t("settings.profileOptions", { returnObjects: true })).map(([value, label]) => (
+                  <SelectItem key={value} value={value}>{label}</SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -107,12 +110,12 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
       <SheetFooter className="mt-6">
         <div className="flex items-center justify-between w-full">
           <Button variant="ghost" onClick={handleLogout} className="text-destructive">
-            Se déconnecter
+            {t("settings.logout")}
           </Button>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={onClose}>Annuler</Button>
-            <Button onClick={handleSave}>Enregistrer</Button>
+            <Button variant="outline" onClick={onClose}>{t("settings.cancel")}</Button>
+            <Button onClick={handleSave}>{t("settings.save")}</Button>
           </div>
         </div>
       </SheetFooter>

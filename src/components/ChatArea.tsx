@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatMessage } from "./ChatMessage";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface Message {
   id: string;
@@ -19,10 +20,11 @@ interface ChatAreaProps {
 
 export function ChatArea({ messages, isGenerating, onNewConversation }: ChatAreaProps) {
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
 
   const handleCopyConversation = async () => {
     const conversationText = messages
-      .map((msg) => `${msg.role === "user" ? "Vous" : "Assistant"}: ${msg.content}`)
+      .map((msg) => `${msg.role === "user" ? t("chat.roles.user") : t("chat.roles.assistant")}: ${msg.content}`)
       .join("\n\n");
     
     await navigator.clipboard.writeText(conversationText);
@@ -32,7 +34,7 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
 
   const handleDownloadConversation = () => {
     const conversationText = messages
-      .map((msg) => `${msg.role === "user" ? "Vous" : "Assistant"} (${new Date(msg.timestamp).toLocaleString("fr-FR")}):\n${msg.content}`)
+      .map((msg) => `${msg.role === "user" ? t("chat.roles.user") : t("chat.roles.assistant")} (${new Date(msg.timestamp).toLocaleString()}):\n${msg.content}`)
       .join("\n\n---\n\n");
     
     const blob = new Blob([conversationText], { type: "text/plain" });
@@ -62,9 +64,9 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
             </svg>
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Commencez une nouvelle conversation</h3>
+            <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">{t("chat.empty.title")}</h3>
             <p className="text-muted-foreground text-xs sm:text-sm">
-              Posez une question ou décrivez votre besoin pour démarrer une conversation avec l'IA.
+              {t("chat.empty.description")}
             </p>
           </div>
         </div>
@@ -75,7 +77,7 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
   return (
     <div className="flex flex-col h-full">
       <div className="border-b border-border px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between bg-card">
-        <h3 className="font-semibold text-sm sm:text-base">Conversation</h3>
+        <h3 className="font-semibold text-sm sm:text-base">{t("chat.conversation")}</h3>
         <div className="flex gap-1 sm:gap-2">
           <Button
             variant="ghost"
@@ -84,7 +86,7 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
             className="gap-2"
           >
             <Plus className="h-4 w-4" />
-            Nouvelle
+            {t("chat.actions.new")}
           </Button>
           <Button
             variant="ghost"
@@ -96,12 +98,12 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
             {copied ? (
               <>
                 <Check className="h-4 w-4" />
-                Copié
+                {t("chat.actions.copied")}
               </>
             ) : (
               <>
                 <Copy className="h-4 w-4" />
-                Copier
+                {t("chat.actions.copy")}
               </>
             )}
           </Button>
@@ -113,7 +115,7 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
             disabled={messages.length === 0}
           >
             <Download className="h-4 w-4" />
-            Export
+            {t("chat.actions.export")}
           </Button>
         </div>
       </div>
@@ -136,7 +138,7 @@ export function ChatArea({ messages, isGenerating, onNewConversation }: ChatArea
               </div>
               <div className="flex-1">
                 <span className="font-semibold text-xs sm:text-sm">Assistant IA</span>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 animate-pulse">Génération en cours...</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 animate-pulse">{t("chat.status.generating")}</p>
               </div>
             </div>
           )}

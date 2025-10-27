@@ -3,6 +3,7 @@ import { Send, Mic, MicOff, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { useTranslation } from "react-i18next";
 
 interface PromptInputProps {
   onSubmit: (prompt: string) => void;
@@ -12,6 +13,7 @@ interface PromptInputProps {
 export function PromptInput({ onSubmit, isGenerating }: PromptInputProps) {
   const [prompt, setPrompt] = useState("");
   const { isListening, startListening, stopListening } = useVoiceInput();
+  const { t } = useTranslation();
 
   const handleSubmit = async () => {
     const trimmedPrompt = prompt.trim();
@@ -52,7 +54,7 @@ export function PromptInput({ onSubmit, isGenerating }: PromptInputProps) {
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Décrivez ce que vous souhaitez générer..."
+          placeholder={t("chat.placeholder")}
           className="min-h-[50px] sm:min-h-[70px] resize-none border-0 focus-visible:ring-0 text-sm sm:text-base p-2.5 sm:p-3 pr-[110px] sm:pr-[130px]"
           disabled={isGenerating}
         />
@@ -102,9 +104,9 @@ export function PromptInput({ onSubmit, isGenerating }: PromptInputProps) {
 
       <div className="mt-2 sm:mt-3 flex gap-1.5 sm:gap-2 justify-start overflow-x-auto pb-1.5 no-scrollbar">
         {[
-          "Résumer un article scientifique",
-          "Générer des idées de recherche",
-          "Reformuler un paragraphe",
+          t("chat.suggestions.summarize"),
+          t("chat.suggestions.generate"),
+          t("chat.suggestions.rephrase")
         ].map((suggestion) => (
           <Button
             key={suggestion}

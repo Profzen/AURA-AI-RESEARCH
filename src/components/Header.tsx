@@ -1,6 +1,7 @@
 import { Menu, Settings, Cpu, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/lib/ThemeProvider";
+import { useTranslation } from "react-i18next";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -10,6 +11,7 @@ interface HeaderProps {
 
 export function Header({ onToggleSidebar, onOpenSettings, userName }: HeaderProps) {
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4">
@@ -28,9 +30,9 @@ export function Header({ onToggleSidebar, onOpenSettings, userName }: HeaderProp
               <Cpu className="h-5 w-5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-bold">AURA Research AI</h1>
+              <h1 className="text-lg font-bold">{t("header.title")}</h1>
               <p className="text-xs text-muted-foreground hidden sm:block">
-                {userName ? `${userName} · Assistant scientifique intelligent` : "Assistant scientifique intelligent"}
+                {userName ? `${userName} · ${t("header.subtitle")}` : t("header.subtitle")}
               </p>
             </div>
           </div>

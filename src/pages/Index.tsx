@@ -143,6 +143,14 @@ const Index = () => {
     setIsSettingsOpen(true);
   };
 
+  const handleDeleteConversation = (id: string) => {
+    setConversations((prev) => prev.filter((conv) => conv.id !== id));
+    if (currentConversationId === id) {
+      setCurrentConversationId(null);
+    }
+    toast.success("Conversation supprimée");
+  };
+
   const conversationItems: ConversationItem[] = conversations.map((conv) => ({
     id: conv.id,
     title: conv.title,
@@ -165,6 +173,7 @@ const Index = () => {
             currentConversationId={currentConversationId}
             onSelectConversation={handleSelectConversation}
             onClearHistory={handleClearHistory}
+            onDeleteConversation={handleDeleteConversation}
           />
         </aside>
 
@@ -176,6 +185,7 @@ const Index = () => {
               currentConversationId={currentConversationId}
               onSelectConversation={handleSelectConversation}
               onClearHistory={handleClearHistory}
+              onDeleteConversation={handleDeleteConversation}
             />
           </SheetContent>
         </Sheet>
