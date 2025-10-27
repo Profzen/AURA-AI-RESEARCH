@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { PromptInput } from "@/components/PromptInput";
 import { ChatArea, Message } from "@/components/ChatArea";
@@ -8,6 +8,12 @@ import SettingsPanel from "@/components/SettingsPanel";
 import { toast } from "sonner";
 import { ProfileSelector, type UserProfile } from "@/components/ProfileSelector";
 
+interface UserSettings {
+  profile: UserProfile;
+  language?: string;
+  name?: string;
+}
+
 interface Conversation {
   id: string;
   title: string;
@@ -15,20 +21,86 @@ interface Conversation {
   timestamp: Date;
 }
 
+const STORAGE_KEYS = {
+  CONVERSATIONS: "conversations",
+  CURRENT_CONVERSATION: "currentConversation",
+  SIDEBAR_STATE: "sidebarState",
+  USER_SETTINGS: "userSettings"
+};
+
+const loadFromStorage = <T,>(key: string, defaultValue: T): T => {
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Pour les conversations, on convertit les dates
+      if (key === STORAGE_KEYS.CONVERSATIONS && Array.isArray(parsed)) {
+        return parsed.map((conv: any) => ({
+          ...conv,
+          timestamp: new Date(conv.timestamp),
+          messages: Array.isArray(conv.messages) 
+            ? conv.messages.map((msg: any) => ({
+                ...msg,
+                timestamp: new Date(msg.timestamp)
+              }))
+            : []
+        })) as T;
+      }
+      return parsed;
+    }
+  } catch (error) {
+    console.error(`Error loading ${key} from storage:`, error);
+  }
+  return defaultValue;
+};
+
+const saveToStorage = (key: string, value: any) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error saving ${key} to storage:`, error);
+  }
+};
+
 const Index = () => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [conversations, setConversations] = useState<Conversation[]>(() => 
+    loadFromStorage(STORAGE_KEYS.CONVERSATIONS, [])
+  );
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(() => 
+    loadFromStorage(STORAGE_KEYS.CURRENT_CONVERSATION, null)
+  );
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => 
+    loadFromStorage(STORAGE_KEYS.SIDEBAR_STATE, false)
+  );
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState<UserProfile>("researcher");
+  const [selectedProfile, setSelectedProfile] = useState<UserProfile>(() => {
+    const settings = loadFromStorage<UserSettings>(STORAGE_KEYS.USER_SETTINGS, { profile: "researcher" });
+    return settings.profile;
+  });
+
+  // Effet pour sauvegarder les conversations
+  React.useEffect(() => {
+    if (conversations.length > 0) {
+      saveToStorage(STORAGE_KEYS.CONVERSATIONS, conversations);
+    }
+  }, [conversations]);
+
+  // Effet pour sauvegarder la conversation courante
+  React.useEffect(() => {
+    saveToStorage(STORAGE_KEYS.CURRENT_CONVERSATION, currentConversationId);
+  }, [currentConversationId]);
+
+  // Effet pour sauvegarder l'état de la sidebar
+  React.useEffect(() => {
+    saveToStorage(STORAGE_KEYS.SIDEBAR_STATE, isSidebarOpen);
+  }, [isSidebarOpen]);
 
   const handleProfileChange = (profile: UserProfile) => {
     setSelectedProfile(profile);
     try {
-      const currentSettings = localStorage.getItem("userSettings");
-      const settings = currentSettings ? JSON.parse(currentSettings) : {};
-      localStorage.setItem("userSettings", JSON.stringify({ ...settings, profile }));
+      const currentSettings = loadFromStorage(STORAGE_KEYS.USER_SETTINGS, {});
+      saveToStorage(STORAGE_KEYS.USER_SETTINGS, { ...currentSettings, profile });
       toast.success("Profil mis à jour");
     } catch (error) {
       console.error("Error saving profile:", error);
@@ -134,9 +206,17 @@ const Index = () => {
   };
 
   const handleClearHistory = () => {
-    setConversations([]);
-    setCurrentConversationId(null);
-    toast.success("Historique effacé");
+    try {
+      setConversations([]);
+      setCurrentConversationId(null);
+      // Effacer les conversations du stockage local
+      localStorage.removeItem(STORAGE_KEYS.CONVERSATIONS);
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_CONVERSATION);
+      toast.success("Historique effacé");
+    } catch (error) {
+      console.error("Error clearing history:", error);
+      toast.error("Erreur lors de l'effacement de l'historique");
+    }
   };
 
   const handleOpenSettings = () => {
@@ -144,11 +224,24 @@ const Index = () => {
   };
 
   const handleDeleteConversation = (id: string) => {
-    setConversations((prev) => prev.filter((conv) => conv.id !== id));
-    if (currentConversationId === id) {
-      setCurrentConversationId(null);
+    try {
+      setConversations((prev) => {
+        const newConversations = prev.filter((conv) => conv.id !== id);
+        // Sauvegarder immédiatement dans le localStorage
+        saveToStorage(STORAGE_KEYS.CONVERSATIONS, newConversations);
+        return newConversations;
+      });
+      
+      if (currentConversationId === id) {
+        setCurrentConversationId(null);
+        saveToStorage(STORAGE_KEYS.CURRENT_CONVERSATION, null);
+      }
+      
+      toast.success("Conversation supprimée");
+    } catch (error) {
+      console.error("Error deleting conversation:", error);
+      toast.error("Erreur lors de la suppression de la conversation");
     }
-    toast.success("Conversation supprimée");
   };
 
   const conversationItems: ConversationItem[] = conversations.map((conv) => ({
