@@ -509,7 +509,7 @@ ${prompt}`;
             <History className={`h-5 w-5 ${isDark ? 'text-sky-300' : 'text-primary'}`} />
             <h2 className="font-semibold">{t("chat.conversation")}</h2>
           </div>
-          {conversations.length > 0 && (
+          {/*{conversations.length > 0 && (
             <Button
               variant="ghost"
               size="sm"
@@ -518,7 +518,7 @@ ${prompt}`;
             >
               <Trash2 className="h-4 w-4" />
             </Button>
-          )}
+          )}*/}
         </div>
 
         <div className="flex flex-col gap-2 mb-3">
