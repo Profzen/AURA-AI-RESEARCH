@@ -551,10 +551,10 @@ ${prompt}`;
 
       <ScrollArea className="flex-1">
         <div className={`p-3 border-b flex items-center justify-between ${isDark ? 'border-slate-700' : 'border-border'}`}>
-          <div className="flex items-center gap-2">
+          {/*<div className="flex items-center gap-2">
             <History className={`h-4 w-4 ${isDark ? 'text-sky-300' : ''}`} />
-            {/*<h3 className="text-sm font-medium">History</h3>*/}
-          </div>
+            {/*<h3 className="text-sm font-medium">History</h3>
+          </div> */}
 
           <div>
             <Button variant="ghost" size="sm" onClick={() => { if (selectedSection !== "history") { setSelectedSection("history"); setShowHistoryList(true); } else { setShowHistoryList((s) => !s); } }}>
