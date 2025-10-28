@@ -26,7 +26,7 @@ const resources = {
           marketer: "Marketeur",
           designer: "Designer",
           dev: "Développeur",
-          clinician: "Clinicien",
+          
           other: "Autre"
         }
       },

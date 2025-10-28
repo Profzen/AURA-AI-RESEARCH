@@ -1,18 +1,14 @@
-import { StrictMode } from "react";
+// src/main.tsx
+import React from "react";
 import { createRoot } from "react-dom/client";
-import { ThemeProvider } from "@/lib/ThemeProvider";
-import { Toaster } from "@/components/ui/sonner";
-import App from "./App.tsx";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import "./index.css";
+import App from "./App";
+import "./index.css"; // garde ton fichier de styles global (tailwind / globals)
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <ThemeProvider defaultTheme="light">
-        <App />
-        <Toaster />
-      </ThemeProvider>
-    </ErrorBoundary>
-  </StrictMode>
+const container = document.getElementById("root");
+if (!container) throw new Error("Root element #root not found");
+
+createRoot(container).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );
