@@ -165,7 +165,7 @@ export function HistorySidebar({
                 setModalSection(null);
               }}
             >
-              {t("sidebar.close") ?? "Close"}
+              {t("close") ?? "Close"}
             </Button>
           </div>
         </div>
@@ -694,9 +694,9 @@ ${prompt}`;
 
       <div className={`p-3 border-t ${isDark ? "border-slate-700" : "border-border"}`}>
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div>{t("sidebar.version") ?? "Version 1.0"}</div>
+          <div>{t("Version 1.0") ?? "Version 1.0"}</div>
           <div className="flex items-center gap-2">
-            <Button size="sm" variant="ghost">{t("sidebar.owner") ?? "Dr Koffi junior"}</Button>
+            <Button size="sm" variant="ghost">{t("Dr Koffi junior") ?? "Dr Koffi junior"}</Button>
           </div>
         </div>
       </div>
