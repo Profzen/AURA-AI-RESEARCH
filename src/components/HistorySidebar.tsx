@@ -153,7 +153,7 @@ export function HistorySidebar({
           <div className="flex items-center gap-3">
             <h2 className="text-lg font-semibold">{title}</h2>
             <span className={`text-sm ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>
-              ({t("sidebar.preview") ?? "Preview"})
+              ({t("preview") ?? "Preview"})
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -205,7 +205,7 @@ export function HistorySidebar({
     };
 
     return (
-      <ModalWrapper title={t("sidebar.projects")}>
+      <ModalWrapper title={t("projects")}>
         <div className="flex flex-col md:flex-row gap-6">
           <aside
             className={`md:w-1/3 rounded-lg p-3 ${isDark ? "bg-slate-800" : "bg-white"} border ${
@@ -213,7 +213,7 @@ export function HistorySidebar({
             }`}
           >
             <div className="flex items-center justify-between">
-              <h4 className="font-medium">{t("sidebar.projects")}</h4>
+              <h4 className="font-medium">{t("projects")}</h4>
               <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{projects.length}</div>
             </div>
 
@@ -231,9 +231,9 @@ export function HistorySidebar({
                     <div className={`text-xs ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>{p.desc}</div>
                     <div className="mt-2 flex items-center gap-2 text-xs">
                       <Users className="h-4 w-4" />
-                      <span>{p.members.length} {t("sidebar.members") ?? "members"}</span>
+                      <span>{p.members.length} {t("members") ?? "members"}</span>
                       <span>•</span>
-                      <span>{t("sidebar.lastUpdated") ?? "Last updated"}: {p.lastUpdated}</span>
+                      <span>{t("lastUpdated") ?? "Last updated"}: {p.lastUpdated}</span>
                     </div>
                   </div>
                   <div className="w-24">
@@ -247,7 +247,7 @@ export function HistorySidebar({
             </ul>
 
             <div className="mt-4">
-              <Input value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} placeholder={t("sidebar.newProjectPlaceholder") ?? "New project name"} className="mb-2" />
+              <Input value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} placeholder={t("newProjectPlaceholder") ?? "New project name"} className="mb-2" />
               <Button
                 size="sm"
                 onClick={() => {
@@ -259,7 +259,7 @@ export function HistorySidebar({
                   setNewProjectName("");
                 }}
               >
-                {t("sidebar.create") ?? "Create"}
+                {t("create") ?? "Create"}
               </Button>
             </div>
           </aside>
@@ -275,20 +275,20 @@ export function HistorySidebar({
                   </div>
                   <div className="text-muted-foreground">•</div>
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" /> {t("sidebar.lastUpdated") ?? "Last updated"}: {project.lastUpdated}
+                    <Clock className="h-4 w-4" /> {t("lastUpdated") ?? "Last updated"}: {project.lastUpdated}
                   </div>
                 </div>
               </div>
 
               <div className="flex gap-2">
-                <Button size="sm">{t("sidebar.openWorkspace") ?? "Open Workspace"}</Button>
+                <Button size="sm">{t("openWorkspace") ?? "Open Workspace"}</Button>
               </div>
             </div>
 
             <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
               <section className={`p-3 border rounded ${isDark ? "border-slate-700" : ""}`}>
                 <div className="flex items-center justify-between">
-                  <div className="text-xs">{t("sidebar.milestones") ?? "Milestones"}</div>
+                  <div className="text-xs">{t("milestones") ?? "Milestones"}</div>
                   <div className="text-xs text-muted-foreground">{project.milestones.length}</div>
                 </div>
                 <ul className="mt-3 space-y-2">
@@ -303,13 +303,13 @@ export function HistorySidebar({
                           <div className={`text-xs ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>{m.date}</div>
                         </div>
                       </div>
-                      <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{m.done ? (t("sidebar.done") ?? "Done") : (t("sidebar.pending") ?? "Pending")}</div>
+                      <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{m.done ? (t("done") ?? "Done") : (t("pending") ?? "Pending")}</div>
                     </li>
                   ))}
                 </ul>
 
                 <div className="mt-3">
-                  <Input placeholder={t("sidebar.newMilestonePlaceholder") ?? "New milestone title"} id="milestone-input" className="mb-2" />
+                  <Input placeholder={t("newMilestonePlaceholder") ?? "New milestone title"} id="milestone-input" className="mb-2" />
                   <Button
                     size="sm"
                     onClick={() => {
@@ -319,13 +319,13 @@ export function HistorySidebar({
                       el.value = "";
                     }}
                   >
-                    {t("sidebar.addMilestone") ?? "Add milestone"}
+                    {t("addMilestone") ?? "Add milestone"}
                   </Button>
                 </div>
               </section>
 
               <section className={`p-3 border rounded ${isDark ? "border-slate-700" : ""}`}>
-                <div className="text-xs">{t("sidebar.datasetsFiles") ?? "Datasets & Files"}</div>
+                <div className="text-xs">{t("datasetsFiles") ?? "Datasets & Files"}</div>
                 <ul className="mt-3 space-y-2 text-sm">
                   {project.datasets.map((f, i) => (
                     <li key={i} className="flex items-center justify-between">
@@ -333,33 +333,33 @@ export function HistorySidebar({
                         <FileText className="h-4 w-4" />
                         {f}
                       </div>
-                      <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("sidebar.download") ?? "Download"}</div>
+                      <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("download") ?? "Download"}</div>
                     </li>
                   ))}
                 </ul>
                 <div className="mt-3">
-                  <Button size="sm">{t("sidebar.upload") ?? "Upload"}</Button>
+                  <Button size="sm">{t("upload") ?? "Upload"}</Button>
                   <Button variant="ghost" size="sm">
-                    {t("sidebar.sync") ?? "Sync"}
+                    {t("sync") ?? "Sync"}
                   </Button>
                 </div>
               </section>
 
               <section className={`p-3 border rounded ${isDark ? "border-slate-700" : ""}`}>
-                <div className="text-xs">{t("sidebar.tasks") ?? "Tasks"}</div>
+                <div className="text-xs">{t("tasks") ?? "Tasks"}</div>
                 <ul className="mt-3 text-sm space-y-2">
-                  <li>• {t("sidebar.task.cleanDataset") ?? "Clean dataset"}</li>
-                  <li>• {t("sidebar.task.runBaseline") ?? "Run baseline model"}</li>
-                  <li>• {t("sidebar.task.draftIntro") ?? "Draft paper intro"}</li>
+                  <li>• {t("task cleanDataset") ?? "Clean dataset"}</li>
+                  <li>• {t("task runBaseline") ?? "Run baseline model"}</li>
+                  <li>• {t("task draftIntro") ?? "Draft paper intro"}</li>
                 </ul>
                 <div className="mt-3">
-                  <Button size="sm">{t("sidebar.openBoard") ?? "Open Board"}</Button>
+                  <Button size="sm">{t("openBoard") ?? "Open Board"}</Button>
                 </div>
               </section>
             </div>
 
             <div className="mt-6">
-              <h5 className="font-medium">{t("sidebar.notes") ?? "Notes"}</h5>
+              <h5 className="font-medium">{t("notes") ?? "Notes"}</h5>
               <p className={`mt-2 text-sm ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{project.notes}</p>
             </div>
           </main>
@@ -386,16 +386,16 @@ export function HistorySidebar({
     const selected = libraryItems.find((l) => l.id === selectedLibId) ?? libraryItems[0];
 
     return (
-      <ModalWrapper title={t("sidebar.library")}>
+      <ModalWrapper title={t("library")}>
         <div className="flex flex-col md:flex-row gap-6">
           <aside className={`md:w-1/3 rounded-lg p-3 ${isDark ? "bg-slate-800" : "bg-white"} border ${isDark ? "border-slate-700" : "border-slate-200"}`}>
             <div className="flex items-center justify-between">
-              <h4 className="font-medium">{t("sidebar.savedItems") ?? "Saved items"}</h4>
+              <h4 className="font-medium">{t("savedItems") ?? "Saved items"}</h4>
               <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{libraryItems.length}</div>
             </div>
 
             <div className="mt-3">
-              <Input value={libSearch} onChange={(e) => setLibSearch(e.target.value)} placeholder={t("sidebar.searchLibrary") ?? "Search library..."} className="mb-2" />
+              <Input value={libSearch} onChange={(e) => setLibSearch(e.target.value)} placeholder={t("searchLibrary") ?? "Search library..."} className="mb-2" />
             </div>
 
             <ul className="space-y-2 text-sm">
@@ -410,19 +410,19 @@ export function HistorySidebar({
                   <div>
                     <div className="font-medium">{l.title}</div>
                     <div className={`text-xs ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>{l.type} • {l.tags.join(", ")}</div>
-                    <div className={`text-xs mt-1 ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>v{l.versions.length} • {t("sidebar.sharedWith") ?? "shared with"} {l.sharedWith.join(", ")}</div>
+                    <div className={`text-xs mt-1 ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>v{l.versions.length} • {t("sharedWith") ?? "shared with"} {l.sharedWith.join(", ")}</div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="icon" variant="ghost" title={t("sidebar.tags") ?? "Tags"}><Tag className="h-4 w-4" /></Button>
-                    <Button size="icon" variant="ghost" title={t("sidebar.owner") ?? "Owner"}><User className="h-4 w-4" /></Button>
+                    <Button size="icon" variant="ghost" title={t("tags") ?? "Tags"}><Tag className="h-4 w-4" /></Button>
+                    <Button size="icon" variant="ghost" title={t("owner") ?? "Owner"}><User className="h-4 w-4" /></Button>
                   </div>
                 </li>
               ))}
             </ul>
 
             <div className="mt-3 flex gap-2">
-              <Button size="sm">{t("sidebar.import") ?? "Import"}</Button>
-              <Button size="sm" variant="ghost">{t("sidebar.new") ?? "New"}</Button>
+              <Button size="sm">{t("import") ?? "Import"}</Button>
+              <Button size="sm" variant="ghost">{t("new") ?? "New"}</Button>
             </div>
           </aside>
 
@@ -432,24 +432,24 @@ export function HistorySidebar({
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-xl font-semibold">{selected.title}</h3>
-                    <div className={`text-sm mt-1 ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{selected.type} • {t("sidebar.tagsLabel") ?? "Tags"}: {selected.tags.join(", ")}</div>
+                    <div className={`text-sm mt-1 ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{selected.type} • {t("tagsLabel") ?? "Tags"}: {selected.tags.join(", ")}</div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm">{t("sidebar.useInChat") ?? "Use in chat"}</Button>
-                    <Button variant="ghost" size="sm">{t("sidebar.edit") ?? "Edit"}</Button>
-                    <Button variant="ghost" size="sm">{t("sidebar.export") ?? "Export"}</Button>
+                    <Button size="sm">{t(".useInChat") ?? "Use in chat"}</Button>
+                    <Button variant="ghost" size="sm">{t("edit") ?? "Edit"}</Button>
+                    <Button variant="ghost" size="sm">{t("export") ?? "Export"}</Button>
                   </div>
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                   <section className={`p-3 border rounded ${isDark ? "border-slate-700" : ""}`}>
-                    <div className="text-xs">{t("sidebar.preview") ?? "Preview"}</div>
+                    <div className="text-xs">{t("preview") ?? "Preview"}</div>
                     <div className={`mt-2 p-3 rounded border ${isDark ? "border-slate-700" : ""}`}>{selected.content}</div>
-                    <div className="mt-3 text-xs">{t("sidebar.sharedWith") ?? "Shared with"}: {selected.sharedWith.join(", ")}</div>
+                    <div className="mt-3 text-xs">{t("sharedWith") ?? "Shared with"}: {selected.sharedWith.join(", ")}</div>
                   </section>
 
                   <section className={`p-3 border rounded ${isDark ? "border-slate-700" : ""}`}>
-                    <div className="text-xs">{t("sidebar.versions") ?? "Versions"}</div>
+                    <div className="text-xs">{t("versions") ?? "Versions"}</div>
                     <ul className="mt-2 text-sm space-y-2">
                       {selected.versions.map((v) => (
                         <li key={v.v} className="flex items-center justify-between">
@@ -459,28 +459,28 @@ export function HistorySidebar({
                       ))}
                     </ul>
                     <div className="mt-3">
-                      <Input value={versionNote} onChange={(e) => setVersionNote(e.target.value)} placeholder={t("sidebar.versionNotePlaceholder") ?? "Version note"} className="mb-2" />
-                      <Button size="sm" onClick={() => addVersion(selected.id, versionNote)}>{t("sidebar.addVersion") ?? "Add version"}</Button>
+                      <Input value={versionNote} onChange={(e) => setVersionNote(e.target.value)} placeholder={t("versionNotePlaceholder") ?? "Version note"} className="mb-2" />
+                      <Button size="sm" onClick={() => addVersion(selected.id, versionNote)}>{t("addVersion") ?? "Add version"}</Button>
                     </div>
                   </section>
 
                   <section className={`p-3 border rounded ${isDark ? "border-slate-700" : ""}`}>
-                    <div className="text-xs">{t("sidebar.usageMetadata") ?? "Usage & Metadata"}</div>
+                    <div className="text-xs">{t("usageMetadata") ?? "Usage & Metadata"}</div>
                     <div className="mt-2 text-sm">
-                      <div className="flex items-center gap-2"><Calendar className="h-4 w-4" /> {t("sidebar.created") ?? "Created"}: {selected.versions[0]?.date}</div>
-                      <div className="flex items-center gap-2 mt-2"><Users className="h-4 w-4" /> {t("sidebar.shared") ?? "Shared"}: {selected.sharedWith.join(", ")}</div>
-                      <div className="flex items-center gap-2 mt-2"><FileText className="h-4 w-4" /> {t("sidebar.typeLabel") ?? "Type"}: {selected.type}</div>
+                      <div className="flex items-center gap-2"><Calendar className="h-4 w-4" /> {t("created") ?? "Created"}: {selected.versions[0]?.date}</div>
+                      <div className="flex items-center gap-2 mt-2"><Users className="h-4 w-4" /> {t("shared") ?? "Shared"}: {selected.sharedWith.join(", ")}</div>
+                      <div className="flex items-center gap-2 mt-2"><FileText className="h-4 w-4" /> {t("typeLabel") ?? "Type"}: {selected.type}</div>
                     </div>
                   </section>
                 </div>
 
                 <div className="mt-6">
-                  <h5 className="font-medium">{t("sidebar.notesComments") ?? "Notes / Collaborator comments"}</h5>
-                  <div className={`mt-2 p-3 rounded border ${isDark ? "border-slate-700" : ""}`}>{t("sidebar.noCommentsYet") ?? "No comments yet. Collaborators can leave notes about usage, improvements and examples."}</div>
+                  <h5 className="font-medium">{t("notesComments") ?? "Notes / Collaborator comments"}</h5>
+                  <div className={`mt-2 p-3 rounded border ${isDark ? "border-slate-700" : ""}`}>{t("noCommentsYet") ?? "No comments yet. Collaborators can leave notes about usage, improvements and examples."}</div>
                 </div>
               </div>
             ) : (
-              <div className={`text-sm ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("sidebar.selectItemPreview") ?? "Select an item to preview. Use the search to find prompts or templates quickly."}</div>
+              <div className={`text-sm ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("selectItemPreview") ?? "Select an item to preview. Use the search to find prompts or templates quickly."}</div>
             )}
           </main>
         </div>
@@ -498,44 +498,44 @@ export function HistorySidebar({
   );
 
   const DashboardModal = () => (
-    <ModalWrapper title={t("sidebar.dashboard")}>
+    <ModalWrapper title={t("dashboard")}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard title={t("sidebar.activeConversations") ?? "Active conversations"} value={`${conversations.length}`} hint={t("sidebar.activeConversationsHint") ?? "Conversations in this workspace"} />
-        <StatCard title={t("sidebar.savedPrompts") ?? "Saved prompts"} value={`${libraryItems.length}`} hint={t("sidebar.savedPromptsHint") ?? "Useful templates & prompts"} />
-        <StatCard title={t("sidebar.projects") ?? "Projects"} value={`${projects.length}`} hint={t("sidebar.projectsHint") ?? "Workspaces and collaborators"} />
+        <StatCard title={t("activeConversations") ?? "Active conversations"} value={`${conversations.length}`} hint={t("activeConversationsHint") ?? "Conversations in this workspace"} />
+        <StatCard title={t("savedPrompts") ?? "Saved prompts"} value={`${libraryItems.length}`} hint={t("savedPromptsHint") ?? "Useful templates & prompts"} />
+        <StatCard title={t("projects") ?? "Projects"} value={`${projects.length}`} hint={t("projectsHint") ?? "Workspaces and collaborators"} />
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className={`border rounded-lg p-4 ${isDark ? "border-slate-700 bg-slate-800" : ""}`}>
-          <h4 className="font-medium">{t("sidebar.recentConversations") ?? "Recent conversations"}</h4>
+          <h4 className="font-medium">{t("recentConversations") ?? "Recent conversations"}</h4>
           <ul className="mt-3 space-y-2 text-sm">
             {conversations.slice(0, 8).map((c) => (
               <li key={c.id} className="flex items-center justify-between">
                 <div>
                   <div className="font-medium">{c.title}</div>
-                  <div className={`text-xs ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>{c.messageCount} {t("sidebar.messages") ?? "messages"} — {new Date(c.timestamp).toLocaleString()}</div>
+                  <div className={`text-xs ${isDark ? "text-slate-400" : "text-muted-foreground"}`}>{c.messageCount} {t("messages") ?? "messages"} — {new Date(c.timestamp).toLocaleString()}</div>
                 </div>
-                <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("sidebar.view") ?? "View"}</div>
+                <div className={`text-xs ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("view") ?? "View"}</div>
               </li>
             ))}
           </ul>
         </div>
 
         <div className={`border rounded-lg p-4 ${isDark ? "border-slate-700 bg-slate-800" : ""}`}>
-          <h4 className="font-medium">{t("sidebar.activityFeed") ?? "Activity feed"}</h4>
+          <h4 className="font-medium">{t("activityFeed") ?? "Activity feed"}</h4>
           <div className="mt-3 text-sm space-y-2">
-            <div className={`${isDark ? "text-slate-300" : "text-muted-foreground"}`}>• {t("sidebar.feed.newPrompt") ?? 'New prompt saved: "Summarize Paper Prompt" — 3 hours ago'}</div>
-            <div className={`${isDark ? "text-slate-300" : "text-muted-foreground"}`}>• {t("sidebar.feed.projectUpdated") ?? 'Project "Research AI" updated — 1 day ago'}</div>
-            <div className={`${isDark ? "text-slate-300" : "text-muted-foreground"}`}>• {t("sidebar.feed.exportCompleted") ?? "Export completed — 2 days ago"}</div>
+            <div className={`${isDark ? "text-slate-300" : "text-muted-foreground"}`}>• {t("feed new Prompt") ?? 'New prompt saved: "Summarize Paper Prompt" — 3 hours ago'}</div>
+            <div className={`${isDark ? "text-slate-300" : "text-muted-foreground"}`}>• {t("feed project Updated") ?? 'Project "Research AI" updated — 1 day ago'}</div>
+            <div className={`${isDark ? "text-slate-300" : "text-muted-foreground"}`}>• {t("feed export Completed") ?? "Export completed — 2 days ago"}</div>
           </div>
         </div>
       </div>
 
       <div className={`mt-6 border rounded-lg p-4 ${isDark ? "border-slate-700 bg-slate-800" : ""}`}>
-        <h4 className="font-medium">{t("sidebar.quickCharts") ?? "Quick charts"}</h4>
+        <h4 className="font-medium">{t("quickCharts") ?? "Quick charts"}</h4>
         <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className={`h-36 border rounded flex items-center justify-center text-sm ${isDark ? "border-slate-700 text-slate-400" : "text-muted-foreground"}`}>{t("sidebar.chartMessages") ?? "[Chart placeholder: messages / week]"}</div>
-          <div className={`h-36 border rounded flex items-center justify-center text-sm ${isDark ? "border-slate-700 text-slate-400" : "text-muted-foreground"}`}>{t("sidebar.chartPrompts") ?? "[Chart placeholder: prompt usage]"}</div>
+          <div className={`h-36 border rounded flex items-center justify-center text-sm ${isDark ? "border-slate-700 text-slate-400" : "text-muted-foreground"}`}>{t("chartMessages") ?? "[Chart placeholder: messages / week]"}</div>
+          <div className={`h-36 border rounded flex items-center justify-center text-sm ${isDark ? "border-slate-700 text-slate-400" : "text-muted-foreground"}`}>{t("chartPrompts") ?? "[Chart placeholder: prompt usage]"}</div>
         </div>
       </div>
     </ModalWrapper>
@@ -557,41 +557,41 @@ ${prompt}`;
     };
 
     return (
-      <ModalWrapper title={t("sidebar.assistant")}>
+      <ModalWrapper title={t("assistant")}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className={`col-span-1 border rounded-lg p-3 ${isDark ? "border-slate-700 bg-slate-800" : ""}`}>
-            <h5 className="font-medium">{t("sidebar.modesPresets") ?? "Modes & Presets"}</h5>
+            <h5 className="font-medium">{t("modesPresets") ?? "Modes & Presets"}</h5>
             <div className="mt-3 flex flex-col gap-2">
               <Button size="sm" variant={mode === "researcher" ? undefined : "ghost"} onClick={() => setMode("researcher")}>
-                {t("sidebar.mode.researcher") ?? "Researcher"}
+                {t("mode researcher") ?? "Researcher"}
               </Button>
               <Button size="sm" variant={mode === "marketer" ? undefined : "ghost"} onClick={() => setMode("marketer")}>
-                {t("sidebar.mode.marketer") ?? "Marketer"}
+                {t("mode marketer") ?? "Marketer"}
               </Button>
               <Button size="sm" variant={mode === "student" ? undefined : "ghost"} onClick={() => setMode("student")}>
-                {t("sidebar.mode.student") ?? "Student"}
+                {t("mode student") ?? "Student"}
               </Button>
             </div>
           </div>
 
           <div className={`col-span-2 border rounded-lg p-3 ${isDark ? "border-slate-700 bg-slate-800" : ""}`}>
-            <h5 className="font-medium">{t("sidebar.prompt") ?? "Prompt"}</h5>
+            <h5 className="font-medium">{t("prompt") ?? "Prompt"}</h5>
             <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} className="w-full h-32 mt-2 p-2 border rounded" />
 
             <div className="mt-3 flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <div className="text-xs text-muted-foreground">{t("sidebar.temperature") ?? "Temperature"}</div>
+                <div className="text-xs text-muted-foreground">{t("temperature") ?? "Temperature"}</div>
                 <input type="range" min="0" max="1" step="0.1" value={temperature} onChange={(e) => setTemperature(Number(e.target.value))} />
                 <div className="text-xs">{temperature}</div>
               </div>
 
-              <Button size="sm" onClick={runAssistant}>{t("sidebar.run") ?? "Run"}</Button>
-              <Button variant="ghost" size="sm" onClick={() => { setPrompt(""); setResults(null); }}>{t("sidebar.clear") ?? "Clear"}</Button>
+              <Button size="sm" onClick={runAssistant}>{t("run") ?? "Run"}</Button>
+              <Button variant="ghost" size="sm" onClick={() => { setPrompt(""); setResults(null); }}>{t("clear") ?? "Clear"}</Button>
             </div>
 
             {results && (
               <div className="mt-4">
-                <h6 className="font-medium">{t("sidebar.result") ?? "Result"}</h6>
+                <h6 className="font-medium">{t("result") ?? "Result"}</h6>
                 <pre className="mt-2 p-3 border rounded text-sm whitespace-pre-wrap">{results}</pre>
               </div>
             )}
@@ -623,30 +623,30 @@ ${prompt}`;
         </div>
 
         <div className="flex flex-col gap-2 mb-3">
-          <button onClick={() => { setModalSection("dashboard"); setModalOpen(true); setSelectedSection("dashboard"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "dashboard" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("sidebar.dashboard")}>
+          <button onClick={() => { setModalSection("dashboard"); setModalOpen(true); setSelectedSection("dashboard"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "dashboard" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("dashboard")}>
             <Grid className={`h-4 w-4 ${isDark ? "text-sky-300" : ""}`} />
-            <span>{t("sidebar.dashboard")}</span>
+            <span>{t("dashboard")}</span>
           </button>
 
-          <button onClick={() => { setModalSection("projects"); setModalOpen(true); setSelectedSection("projects"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "projects" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("sidebar.projects")}>
+          <button onClick={() => { setModalSection("projects"); setModalOpen(true); setSelectedSection("projects"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "projects" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("projects")}>
             <Folder className={`h-4 w-4 ${isDark ? "text-amber-300" : ""}`} />
-            <span>{t("sidebar.projects")}</span>
+            <span>{t("projects")}</span>
           </button>
 
-          <button onClick={() => { setModalOpen(false); setModalSection(null); setSelectedSection("assistant"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "assistant" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("sidebar.assistant")}>
+          <button onClick={() => { setModalOpen(false); setModalSection(null); setSelectedSection("assistant"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "assistant" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("assistant")}>
             <Cpu className={`h-4 w-4 ${isDark ? "text-emerald-300" : ""}`} />
-            <span>{t("sidebar.assistant")}</span>
+            <span>{t("assistant")}</span>
           </button>
 
-          <button onClick={() => { setModalSection("library"); setModalOpen(true); setSelectedSection("library"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "library" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("sidebar.library")}>
+          <button onClick={() => { setModalSection("library"); setModalOpen(true); setSelectedSection("library"); }} className={`w-full text-left py-3 px-3 rounded-md border transition-colors flex items-center gap-3 ${selectedSection === "library" ? (isDark ? "bg-slate-800 border-slate-700" : "bg-primary/10 border-primary/20") : (isDark ? "hover:bg-slate-800" : "hover:bg-accent")}`} title={t("library")}>
             <BookOpen className={`h-4 w-4 ${isDark ? "text-fuchsia-300" : ""}`} />
-            <span>{t("sidebar.library")}</span>
+            <span>{t("library")}</span>
           </button>
         </div>
 
         <div className="relative">
           <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isDark ? "text-slate-400" : "text-muted-foreground"}`} />
-          <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("sidebar.search")} className="pl-9 text-sm" />
+          <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("search")} className="pl-9 text-sm" />
         </div>
       </div>
 
@@ -655,15 +655,15 @@ ${prompt}`;
           <div>
             <Button variant="ghost" size="sm" onClick={() => { if (selectedSection !== "history") { setSelectedSection("history"); setShowHistoryList(true); } else { setShowHistoryList((s) => !s); } }}>
               <History className="h-4 w-4 mr-2" />
-              {t("sidebar.history")}
+              {t("history")}
             </Button>
           </div>
         </div>
 
         {!showHistoryList ? (
-          <div className={`p-6 text-center text-sm ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("sidebar.clickHistoryHint") ?? `Click ${t("sidebar.history") ?? "History"} to show conversations`}</div>
+          <div className={`p-6 text-center text-sm ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{t("clickHistoryHint") ?? `Click ${t("history") ?? "History"} to show conversations`}</div>
         ) : filteredConversations.length === 0 ? (
-          <div className={`p-6 text-center text-sm ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{searchQuery ? t("sidebar.noResults") : t("sidebar.noConversations")}</div>
+          <div className={`p-6 text-center text-sm ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{searchQuery ? t("noResults") : t("noConversations")}</div>
         ) : (
           <div className="p-2 space-y-2">
             {filteredConversations.map((conv) => (
@@ -674,7 +674,7 @@ ${prompt}`;
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm line-clamp-2 mb-1 group-hover:text-primary">{conv.title}</p>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{conv.messageCount} {t("sidebar.messages") ?? "messages"}</span>
+                        <span>{conv.messageCount} {t("messages") ?? "messages"}</span>
                         <span>•</span>
                         <span>{new Date(conv.timestamp).toLocaleDateString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</span>
                       </div>
@@ -682,7 +682,7 @@ ${prompt}`;
                   </div>
                 </button>
                 {onDeleteConversation && (
-                  <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-destructive hover:bg-destructive/10 rounded transition-colors" onClick={() => onDeleteConversation(conv.id)} title={t("sidebar.delete")}>
+                  <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-destructive hover:bg-destructive/10 rounded transition-colors" onClick={() => onDeleteConversation(conv.id)} title={t("delete")}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 )}
