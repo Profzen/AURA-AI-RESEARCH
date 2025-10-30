@@ -435,7 +435,7 @@ export function HistorySidebar({
                     <div className={`text-sm mt-1 ${isDark ? "text-slate-300" : "text-muted-foreground"}`}>{selected.type} • {t("tagsLabel") ?? "Tags"}: {selected.tags.join(", ")}</div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm">{t(".useInChat") ?? "Use in chat"}</Button>
+                    <Button size="sm">{t("useInChat") ?? "Use in chat"}</Button>
                     <Button variant="ghost" size="sm">{t("edit") ?? "Edit"}</Button>
                     <Button variant="ghost" size="sm">{t("export") ?? "Export"}</Button>
                   </div>
